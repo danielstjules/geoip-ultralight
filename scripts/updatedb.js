@@ -23,7 +23,7 @@ var colors = require('colors');
 var iconv = require('iconv-lite');
 var lazy = require('lazy');
 var rimraf = require('rimraf').sync;
-var unzip = require('unzip');
+var unzipper = require('unzipper');
 var utils = require('../lib/utils');
 
 var dataPath = path.join(__dirname, '..', 'data');
@@ -144,13 +144,13 @@ function extract(tmpFile, tmpFileName, cb) {
   } else {
     process.stdout.write('Extracting ' + tmpFileName + ' ...');
 
-    var unzipStream = unzip.Extract({
+    var unzipStream = unzipper.Extract({
       path: path.dirname(tmpFile)
     });
 
     var pipeSteam = fs.createReadStream(tmpFile).pipe(unzipStream);
 
-    pipeSteam.on('end', function() {
+    pipeSteam.on('close', function() {
       console.log(' DONE'.green);
 
       cb();
